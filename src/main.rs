@@ -1,5 +1,3 @@
-use std::default;
-
 use dialoguer::{Confirm, MultiSelect, theme::ColorfulTheme};
 
 fn main() {
