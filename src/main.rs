@@ -1,8 +1,15 @@
-use dialoguer::{Confirm, MultiSelect, theme::ColorfulTheme};
+use std::fmt::Display;
+
+use dialoguer::{Confirm, MultiSelect, Select, theme::ColorfulTheme};
 
 fn main() {
+    let pm: PackageManager = get_package_manager();
+
+    println!("Your package manager: {}", pm);
+    println!();
+
     loop {
-        let selected = handle_packages();
+        let selected = get_packages();
 
         println!("\nAll selected packages: ");
         selected.iter().for_each(|i| print!("{} ", i));
@@ -17,7 +24,52 @@ fn main() {
     }
 }
 
-fn handle_packages() -> Vec<&'static str> {
+#[derive(Clone)]
+enum PackageManager {
+    Pacman,
+    Yay,
+    Other,
+}
+
+impl Display for PackageManager {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                PackageManager::Pacman => "pacman",
+                PackageManager::Yay => "yay",
+                PackageManager::Other => "Other...",
+            }
+        )
+    }
+}
+
+fn get_package_manager() -> PackageManager {
+    let selected = Select::with_theme(&ColorfulTheme::default())
+        .with_prompt("Which Linux distribution do you use?")
+        .items(vec!["Arch or Arch-based"])
+        .interact()
+        .unwrap();
+
+    let pm = match selected {
+        0 => vec![PackageManager::Pacman, PackageManager::Yay],
+        _ => vec![PackageManager::Other],
+    };
+
+    let selected = Select::with_theme(&ColorfulTheme::default())
+        .with_prompt("Which package manager do you use?")
+        .items(&pm)
+        .interact()
+        .unwrap();
+
+    pm.get(selected)
+        .cloned()
+        .unwrap_or(PackageManager::Other)
+        .clone()
+}
+
+fn get_packages() -> Vec<&'static str> {
     let required = vec![
         "cargo",
         "eza",
