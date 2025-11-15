@@ -19,8 +19,23 @@ fn main() {
 
 fn handle_packages() -> Vec<&'static str> {
     let required = vec![
-        "cargo", "eza", "fd", "fzf", "gcc", "git", "gzip", "lua", "luarocks", "neovim", "python3",
-        "ripgrep", "rustc", "unzip", "wget",
+        "cargo",
+        "eza",
+        "fd",
+        "fzf",
+        "gcc",
+        "git",
+        "gzip",
+        "lua",
+        "luarocks",
+        "neovim",
+        "python3",
+        "ripgrep",
+        "rustc",
+        "unzip",
+        "wget",
+        "wl-clipboard",
+        "xclip",
     ];
     let cli = vec![
         "bat",
